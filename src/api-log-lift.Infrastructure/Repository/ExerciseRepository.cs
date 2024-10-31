@@ -1,7 +1,5 @@
 using api_log_lift.Domain.Entities;
-using api_log_lift.Domain.Exceptions;
 using api_log_lift.Domain.Interfaces;
-using api_log_lift.Domain.Responses;
 using api_log_lift.Infrastructure.Config;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,63 +14,28 @@ public class ExerciseRepository : IExerciseRepository
     _context = context;
   }
 
-  public async Task<IEnumerable<ExerciseResponse>> GetAllExercises(CancellationToken cancellationToken)
+  public async Task<IEnumerable<Exercise>> GetAllExercises(CancellationToken cancellationToken)
   {
     return await _context.Exercises
       .AsNoTracking()
-      .Join(
-        _context.Muscles,
-        exercise => exercise.MuscleId,
-        muscle => muscle.Id,
-        (exercise, muscle) => new ExerciseResponse
-        {
-          Id = exercise.Id,
-          Name = exercise.Name,
-          MuscleId = exercise.MuscleId,
-          MuscleName = muscle.Name
-        }
-      )
+      .Include(g => g.Muscle)
       .ToListAsync(cancellationToken);
   }
 
-  public async Task<ExerciseResponse?> GetExerciseById(int id, CancellationToken cancellationToken)
+  public async Task<Exercise?> GetExerciseById(int id, CancellationToken cancellationToken)
   {
     return await _context.Exercises
       .AsNoTracking()
-      .Where(e => e.Id == id)
-      .Join(
-        _context.Muscles,
-        exercise => exercise.MuscleId,
-        muscle => muscle.Id,
-        (exercise, muscle) => new ExerciseResponse
-        {
-          Id = exercise.Id,
-          Name = exercise.Name,
-          MuscleId = exercise.MuscleId,
-          MuscleName = muscle.Name
-        }
-      )
-      .FirstOrDefaultAsync(cancellationToken);
+      .Include(p => p.Muscle)
+      .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
   }
 
-  public async Task<IEnumerable<ExerciseResponse>> GetExerciseByMuscleId(int muscleGroupId, CancellationToken cancellationToken)
+  public async Task<IEnumerable<Exercise>> GetExerciseByMuscleId(int muscleGroupId, CancellationToken cancellationToken)
   {
-    var exercise = await _context.Exercises.Where(e => e.MuscleId == muscleGroupId).ToListAsync(cancellationToken);
     return await _context.Exercises
-      .AsNoTracking()
-      .Where(e => e.MuscleId == muscleGroupId)
-      .Join(
-        _context.Muscles,
-        exercise => exercise.MuscleId,
-        muscle => muscle.Id,
-        (exercise, muscle) => new ExerciseResponse
-        {
-          Id = exercise.Id,
-          Name = exercise.Name,
-          MuscleId = exercise.MuscleId,
-          MuscleName = muscle.Name
-        }
-      )
-      .ToListAsync(cancellationToken);
+    .AsNoTracking()
+    .Where(e => e.MuscleId == muscleGroupId)
+    .Include(g => g.Muscle)
+    .ToListAsync(cancellationToken);
   }
 }
