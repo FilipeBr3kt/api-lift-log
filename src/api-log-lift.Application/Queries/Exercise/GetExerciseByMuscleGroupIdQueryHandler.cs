@@ -16,6 +16,14 @@ public class GetExerciseByMuscleGroupIdQueryHandler : IRequestHandler<GetExercis
 
   public async Task<IEnumerable<ExerciseResponse>> Handle(GetExerciseByMuscleGroupIdQuery request, CancellationToken cancellationToken)
   {
-    return await _repository.GetExerciseByMuscleId(request.MuscleGroupId, cancellationToken);
+    var result = await _repository.GetExerciseByMuscleId(request.MuscleGroupId, cancellationToken);
+
+    return result.Select(x => new ExerciseResponse
+    (
+      x.Id,
+      x.Name,
+      x.MuscleId,
+      x.Muscle.Name
+    ));
   }
 }

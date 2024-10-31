@@ -19,9 +19,9 @@ public class GetMuscleQueryHandler : IRequestHandler<GetMuscleQuery, IEnumerable
   {
     var result = await _repository.GetAll(cancellationToken);
     return result.Select(m => new MuscleResponse
-    {
-      Id = m.Id,
-      Name = m.Name
-    });
+    (
+      m.Id,
+      m.Name
+    ));
   }
 }

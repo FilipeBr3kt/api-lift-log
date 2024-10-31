@@ -1,4 +1,3 @@
-using api_log_lift.Domain.Entities;
 using api_log_lift.Domain.Interfaces;
 using api_log_lift.Domain.Responses;
 using MediatR;
@@ -16,6 +15,14 @@ public class GetExerciseQueryHandler : IRequestHandler<GetExerciseQuery, IEnumer
 
   public async Task<IEnumerable<ExerciseResponse>> Handle(GetExerciseQuery request, CancellationToken cancellationToken)
   {
-    return await _exerciseRepository.GetAllExercises(cancellationToken);
+    var result = await _exerciseRepository.GetAllExercises(cancellationToken);
+
+    return result.Select(exercise => new ExerciseResponse
+    (
+      exercise.Id,
+      exercise.Name,
+      exercise.MuscleId,
+      exercise.Muscle.Name
+    ));
   }
 }

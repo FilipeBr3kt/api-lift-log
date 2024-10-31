@@ -21,11 +21,11 @@ public class GetTrainingByIdQueryHandler : IRequestHandler<GetTrainingByIdQuery,
       ?? throw new NotFoundException("Training not found");
 
     return new TrainingResponse
-    {
-      Id = trainingExist.Id,
-      DateRegister = trainingExist.DateRegister,
-      Name = trainingExist.Name,
-      UserId = trainingExist.UserId
-    };
+    (
+      trainingExist.Id,
+      trainingExist.Name,
+      trainingExist.DateRegister,
+      trainingExist.UserId
+    );
   }
 }
