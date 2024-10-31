@@ -5,7 +5,7 @@ namespace api_log_lift.Domain.Interfaces;
 
 public interface IExerciseRepository
 {
-  Task<IEnumerable<ExerciseResponse>> GetAllExercises(CancellationToken cancellationToken);
-  Task<ExerciseResponse?> GetExerciseById(int id, CancellationToken cancellationToken);
-  Task<IEnumerable<ExerciseResponse>> GetExerciseByMuscleId(int muscleGroupId, CancellationToken cancellationToken);
+  Task<IEnumerable<Exercise>> GetAllExercises(CancellationToken cancellationToken);
+  Task<Exercise?> GetExerciseById(int id, CancellationToken cancellationToken);
+  Task<IEnumerable<Exercise>> GetExerciseByMuscleId(int muscleGroupId, CancellationToken cancellationToken);
 }

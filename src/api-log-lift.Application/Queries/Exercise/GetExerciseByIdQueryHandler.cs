@@ -1,4 +1,3 @@
-using api_log_lift.Domain.Entities;
 using api_log_lift.Domain.Exceptions;
 using api_log_lift.Domain.Interfaces;
 using api_log_lift.Domain.Responses;
@@ -20,6 +19,12 @@ public class GetExerciseByIdQueryHandler : IRequestHandler<GetExerciseByIdQuery,
     var exerciseExist = await _exerciseRepository.GetExerciseById(request.Id, cancellationToken)
             ?? throw new NotFoundException("Exercise not found");
 
-    return exerciseExist;
+    return new ExerciseResponse
+    (
+      exerciseExist.Id,
+      exerciseExist.Name,
+      exerciseExist.MuscleId,
+      exerciseExist.Muscle.Name
+    );
   }
 }
