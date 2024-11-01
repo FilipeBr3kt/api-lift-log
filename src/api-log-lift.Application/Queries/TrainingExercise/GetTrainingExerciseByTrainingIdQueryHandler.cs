@@ -1,3 +1,4 @@
+using api_log_lift.Domain.Entities;
 using api_log_lift.Domain.Exceptions;
 using api_log_lift.Domain.Interfaces;
 using api_log_lift.Domain.Responses;
@@ -24,7 +25,12 @@ public class GetTrainingExerciseByTrainingIdQueryHandler : IRequestHandler<GetTr
       x.TrainingId,
       x.ExerciseId,
       x.Exercise.Name,
-      x.DateRegister
+      x.DateRegister,
+      x.SetsExercises.Select(y => new SetsExercise(
+        y.TrainingExerciseId,
+        y.Reps,
+        y.Weight
+      )).ToList()
     ));
   }
 }
