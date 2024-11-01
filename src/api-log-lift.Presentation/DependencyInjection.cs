@@ -12,6 +12,7 @@ public static class DependencyInjection
     services.AddScoped<IUserController, UserController>();
     services.AddScoped<ITrainingController, TrainingController>();
     services.AddScoped<ITrainingExerciseController, TrainingExerciseController>();
+    services.AddScoped<ISetsExerciseController, SetsExerciseController>();
 
     return services;
   }
