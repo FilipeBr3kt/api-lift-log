@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services
         .AddPresentation()
         .AddInfrastructure(builder.Configuration)
+        .AddMemoryCache()
+        .AddDistributedMemoryCache()
         .AddControllers();
 
     builder.Services

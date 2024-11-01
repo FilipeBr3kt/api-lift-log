@@ -16,7 +16,12 @@ public class TrainingExerciseRepository : ITrainingExerciseRepository
 
   public async Task<IEnumerable<TrainingExercise?>> GetByTrainingId(int trainingId, CancellationToken cancellationToken)
   {
-    return await _context.TrainingExercises.AsNoTracking().Where(x => x.TrainingId == trainingId).Include(g => g.Exercise).ToListAsync(cancellationToken);
+    return await _context.TrainingExercises.AsNoTracking().Where(x => x.TrainingId == trainingId).Include(g => g.Exercise).Include(g => g.SetsExercises).ToListAsync(cancellationToken);
+  }
+
+  public async Task<IEnumerable<TrainingExercise?>> GetById(int id, CancellationToken cancellationToken)
+  {
+    return await _context.TrainingExercises.AsNoTracking().Where(x => x.Id == id).Include(g => g.Training).ToListAsync(cancellationToken);
   }
 
   public async Task<bool> Save(TrainingExercise trainingExercise, CancellationToken cancellationToken)
